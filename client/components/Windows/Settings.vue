@@ -379,42 +379,48 @@ This may break orientation if your browser does not support that."
 					<label for="old_password_input" class="sr-only">
 						Enter current password
 					</label>
-					<RevealPassword v-slot:default="slotProps">
-						<input
-							id="old_password_input"
-							:type="slotProps.isVisible ? 'text' : 'password'"
-							name="old_password"
-							class="input"
-							placeholder="Enter current password"
-						/>
+					<RevealPassword>
+						<template v-slot:default="slotProps">
+							<input
+								id="old_password_input"
+								:type="slotProps.isVisible ? 'text' : 'password'"
+								name="old_password"
+								class="input"
+								placeholder="Enter current password"
+							/>
+						</template>
 					</RevealPassword>
 				</div>
 				<div class="password-container">
 					<label for="new_password_input" class="sr-only">
 						Enter desired new password
 					</label>
-					<RevealPassword v-slot:default="slotProps">
-						<input
-							id="new_password_input"
-							:type="slotProps.isVisible ? 'text' : 'password'"
-							name="new_password"
-							class="input"
-							placeholder="Enter desired new password"
-						/>
+					<RevealPassword>
+						<template v-slot:default="slotProps">
+							<input
+								id="new_password_input"
+								:type="slotProps.isVisible ? 'text' : 'password'"
+								name="new_password"
+								class="input"
+								placeholder="Enter desired new password"
+							/>
+						</template>
 					</RevealPassword>
 				</div>
 				<div class="password-container">
 					<label for="verify_password_input" class="sr-only">
 						Repeat new password
 					</label>
-					<RevealPassword v-slot:default="slotProps">
-						<input
-							id="verify_password_input"
-							:type="slotProps.isVisible ? 'text' : 'password'"
-							name="verify_password"
-							class="input"
-							placeholder="Repeat new password"
-						/>
+					<RevealPassword>
+						<template v-slot:default="slotProps">
+							<input
+								id="verify_password_input"
+								:type="slotProps.isVisible ? 'text' : 'password'"
+								name="verify_password"
+								class="input"
+								placeholder="Repeat new password"
+							/>
+						</template>
 					</RevealPassword>
 				</div>
 				<div
