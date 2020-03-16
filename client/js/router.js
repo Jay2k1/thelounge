@@ -2,10 +2,7 @@
 
 const constants = require("./constants");
 
-import Vue from "vue";
-import VueRouter from "vue-router";
-
-Vue.use(VueRouter);
+import {createRouter, createWebHashHistory} from "vue-router";
 
 import SignIn from "../components/Windows/SignIn.vue";
 import Connect from "../components/Windows/Connect.vue";
@@ -16,7 +13,8 @@ import NetworkEdit from "../components/Windows/NetworkEdit.vue";
 import RoutedChat from "../components/RoutedChat.vue";
 import store from "./store";
 
-const router = new VueRouter({
+const router = createRouter({
+	history: createWebHashHistory(),
 	routes: [
 		{
 			name: "SignIn",
@@ -47,6 +45,9 @@ router.beforeEach((to, from, next) => {
 		next(false);
 		return;
 	}
+
+	next();
+	return; // TODO: There is no router.app
 
 	// Handle closing image viewer with the browser back button
 	if (!router.app.$refs.app) {
@@ -92,39 +93,37 @@ router.afterEach((to) => {
 });
 
 function initialize() {
-	router.addRoutes([
-		{
-			name: "Connect",
-			path: "/connect",
-			component: Connect,
-			props: (route) => ({queryParams: route.query}),
-		},
-		{
-			name: "Settings",
-			path: "/settings",
-			component: Settings,
-		},
-		{
-			name: "Help",
-			path: "/help",
-			component: Help,
-		},
-		{
-			name: "Changelog",
-			path: "/changelog",
-			component: Changelog,
-		},
-		{
-			name: "NetworkEdit",
-			path: "/edit-network/:uuid",
-			component: NetworkEdit,
-		},
-		{
-			name: "RoutedChat",
-			path: "/chan-:id",
-			component: RoutedChat,
-		},
-	]);
+	router.addRoute({
+		name: "Connect",
+		path: "/connect",
+		component: Connect,
+		props: (route) => ({queryParams: route.query}),
+	});
+	router.addRoute({
+		name: "Settings",
+		path: "/settings",
+		component: Settings,
+	});
+	router.addRoute({
+		name: "Help",
+		path: "/help",
+		component: Help,
+	});
+	router.addRoute({
+		name: "Changelog",
+		path: "/changelog",
+		component: Changelog,
+	});
+	router.addRoute({
+		name: "NetworkEdit",
+		path: "/edit-network/:uuid",
+		component: NetworkEdit,
+	});
+	router.addRoute({
+		name: "RoutedChat",
+		path: "/chan-:id",
+		component: RoutedChat,
+	});
 }
 
 function navigate(routeName, params = {}) {

@@ -3,7 +3,7 @@
 const constants = require("./constants");
 
 import "../css/style.css";
-import Vue from "vue";
+import {createApp, h as createElement} from "vue";
 import store from "./store";
 import App from "../components/App.vue";
 import storage from "./localStorage";
@@ -19,9 +19,7 @@ const favicon = document.getElementById("favicon");
 const faviconNormal = favicon.getAttribute("href");
 const faviconAlerted = favicon.dataset.other;
 
-new Vue({
-	el: "#viewport",
-	router,
+const vueApp = createApp({
 	mounted() {
 		socket.open();
 	},
@@ -62,14 +60,17 @@ new Vue({
 			});
 		},
 	},
-	render(createElement) {
+	render() {
 		return createElement(App, {
 			ref: "app",
 			props: this,
 		});
 	},
-	store,
 });
+
+vueApp.use(store);
+vueApp.use(router);
+vueApp.mount("#viewport");
 
 store.watch(
 	(state) => state.sidebarOpen,
@@ -112,7 +113,7 @@ store.watch(
 	}
 );
 
-Vue.config.errorHandler = function (e) {
+vueApp.config.errorHandler = function (e) {
 	store.commit("currentUserVisibleError", `Vue error: ${e.message}`);
 	console.error(e); // eslint-disable-line
 };
