@@ -3,12 +3,11 @@
 const constants = require("./constants");
 
 import "../css/style.css";
-import {createApp, h as createElement} from "vue";
+import {createApp} from "vue";
 import store from "./store";
 import App from "../components/App.vue";
 import storage from "./localStorage";
-import {router, navigate} from "./router";
-import socket from "./socket";
+import {router} from "./router";
 import eventbus from "./eventbus";
 
 import "./socket-events";
@@ -19,58 +18,10 @@ const favicon = document.getElementById("favicon");
 const faviconNormal = favicon.getAttribute("href");
 const faviconAlerted = favicon.dataset.other;
 
-const vueApp = createApp({
-	mounted() {
-		socket.open();
-	},
-	methods: {
-		switchToChannel(channel) {
-			navigate("RoutedChat", {id: channel.id});
-		},
-		closeChannel(channel) {
-			if (channel.type === "lobby") {
-				eventbus.emit(
-					"confirm-dialog",
-					{
-						title: "Remove network",
-						text: `Are you sure you want to quit and remove ${channel.name}? This cannot be undone.`,
-						button: "Remove network",
-					},
-					(result) => {
-						if (!result) {
-							return;
-						}
-
-						channel.closed = true;
-						socket.emit("input", {
-							target: Number(channel.id),
-							text: "/quit",
-						});
-					}
-				);
-
-				return;
-			}
-
-			channel.closed = true;
-
-			socket.emit("input", {
-				target: Number(channel.id),
-				text: "/close",
-			});
-		},
-	},
-	render() {
-		return createElement(App, {
-			ref: "app",
-			props: this,
-		});
-	},
-});
-
+const vueApp = createApp(App);
 vueApp.use(store);
 vueApp.use(router);
-vueApp.mount("#viewport");
+vueApp.mount("#viewport-mount");
 
 store.watch(
 	(state) => state.sidebarOpen,
